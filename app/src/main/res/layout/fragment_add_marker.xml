@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_marker_form"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.map.AddMarkerFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/et_marker_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/et_marker_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/et_marker_latitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Latitude"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/et_marker_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Address"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/et_marker_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/et_marker_website"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Website"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/et_marker_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/et_marker_halal_certification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Halal Certification"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/et_marker_halal_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Halal Status"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/et_marker_halal_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Halal Type"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Submit" />
+
+
+    </LinearLayout>
+
+</FrameLayout>
