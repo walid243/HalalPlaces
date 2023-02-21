@@ -14,13 +14,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.halalplaces.R
 import com.example.halalplaces.data.map.MapViewModel
+import com.example.halalplaces.data.model.MarkerData
 import com.example.halalplaces.databinding.FragmentMapsBinding
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 
 const val REQUEST_CODE_LOCATION = 100
 
@@ -38,7 +37,11 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         mapViewModel.setMap(googleMap)
         map = mapViewModel.getMap() ?: googleMap
         createSampleMarker()
+        map.setOnMapLongClickListener {coordinates ->
+            mapViewModel.setMarkerData(MarkerData("",coordinates))
+        }
         enableLocation()
+
     }
 
     override fun onCreateView(
@@ -61,7 +64,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private fun addNewMarker() {
         parentFragmentManager.beginTransaction()
-            .replace(R.id.add_marker, AddMarkerFragment(), "add_marker")
+            .replace(R.id.fragment_container, AddMarkerFragment(), "add_marker")
+            .addToBackStack(tag)
             .commit()
     }
 
@@ -80,9 +84,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     fun createSampleMarker() {
         val coordinates = LatLng(41.4534227, 2.1841046)
-        val myMarker = MarkerOptions().position(coordinates).title("ITB")
-        map.addMarker(myMarker)
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15f), 4000, null)
+        val myMarkerData = MarkerData("ITB", coordinates)
+        mapViewModel.setMarkerData(myMarkerData)
     }
 
     private fun isLocationPermissionGranted(): Boolean {

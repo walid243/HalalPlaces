@@ -2,12 +2,14 @@ package com.example.halalplaces.data.map
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.halalplaces.data.model.Marker
+import com.example.halalplaces.data.model.MarkerData
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.MarkerOptions
 
-class MapViewModel: ViewModel()  {
-    private val data = MutableLiveData<Marker>()
+class MapViewModel : ViewModel() {
+    private val markers = MutableLiveData<MutableList<MarkerOptions>>(mutableListOf())
+    private var newMarker: MarkerOptions? = null
+    private var markerData: MarkerData? = null
     private var map: GoogleMap? = null
 
     fun setMap(map: GoogleMap) {
@@ -18,9 +20,43 @@ class MapViewModel: ViewModel()  {
         return map
     }
 
-    fun addMarker(markerData: Marker) {
-        val marker = MarkerOptions().position(markerData.coordinates).title(markerData.name)
+    fun setMarkerData(data: MarkerData) {
+        markerData = data
+    }
+
+    fun getMarkerData(): MarkerData? = markerData
+
+    fun setNewMarker(data: MarkerOptions?) {
+        newMarker = data
+    }
+
+    fun getNewMaker(): MarkerOptions? = newMarker
+
+    fun addMarker() {
+        val coordinates = markerData!!.coordinates
+        val tag = markerData!!.name
+        val marker = MarkerOptions().position(coordinates).title(tag)
+        newMarker = marker
+    }
+
+    fun addMarkerToMap() {
+        val marker = newMarker!!
         map?.addMarker(marker)
-        data.postValue(markerData)
+    }
+
+    fun addAllMarkersToMap() {
+        markers.value!!.forEach {
+            map?.addMarker(it)
+        }
+    }
+
+    fun saveMarker() {
+        if (newMarker != null) {
+            val marker = newMarker!!
+            val currentMarkers = markers.value!!
+            currentMarkers.add(marker)
+            markers.postValue(currentMarkers)
+            setNewMarker(null)
+        }
     }
 }

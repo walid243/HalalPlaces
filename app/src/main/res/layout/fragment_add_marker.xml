@@ -23,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Description"
+            android:visibility="invisible"
             android:inputType="text" />
 
         <EditText
@@ -37,6 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Address"
+            android:visibility="invisible"
             android:inputType="text" />
 
         <EditText
@@ -44,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Phone"
+            android:visibility="invisible"
             android:inputType="text" />
 
         <EditText
@@ -51,6 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Website"
+            android:visibility="invisible"
             android:inputType="text" />
 
         <EditText
@@ -58,6 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
+            android:visibility="invisible"
             android:inputType="text" />
 
         <EditText
@@ -65,6 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Halal Certification"
+            android:visibility="invisible"
             android:inputType="text" />
 
         <EditText
@@ -72,6 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Halal Status"
+            android:visibility="invisible"
             android:inputType="text" />
 
         <EditText
@@ -79,6 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Halal Type"
+            android:visibility="invisible"
             android:inputType="text" />
 
         <Button
