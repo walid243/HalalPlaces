@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.halalplaces.R
 import com.example.halalplaces.databinding.FragmentLoginBinding
 import com.example.halalplaces.ui.map.MapsFragment
@@ -34,9 +35,8 @@ class LoginFragment : Fragment() {
     }
 
     fun toMapsFragment() {
-        val mapsFragment = MapsFragment()
-            parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, mapsFragment, "map").commit()
+        val action = LoginFragmentDirections.actionLoginFragmentToMapsFragment()
+        findNavController().navigate(action)
     }
 
 

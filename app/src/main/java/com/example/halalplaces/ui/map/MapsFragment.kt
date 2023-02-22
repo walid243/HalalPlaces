@@ -12,14 +12,15 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.halalplaces.R
 import com.example.halalplaces.data.map.MapViewModel
-import com.example.halalplaces.data.model.MarkerData
 import com.example.halalplaces.databinding.FragmentMapsBinding
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 
 const val REQUEST_CODE_LOCATION = 100
 
@@ -31,6 +32,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     fun createMap() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -38,10 +40,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         map = mapViewModel.getMap() ?: googleMap
         createSampleMarker()
         map.setOnMapLongClickListener {coordinates ->
-            mapViewModel.setMarkerData(MarkerData("",coordinates))
+            mapViewModel.setMarkerPosition(coordinates)
         }
         enableLocation()
-
+        mapViewModel.addAllMarkersToMap()
     }
 
     override fun onCreateView(
@@ -63,10 +65,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun addNewMarker() {
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, AddMarkerFragment(), "add_marker")
-            .addToBackStack(tag)
-            .commit()
+        val action = MapsFragmentDirections.actionMapsFragmentToAddMarkerFragment()
+        findNavController().navigate(action)
     }
 
     override fun onResume() {
@@ -84,8 +84,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     fun createSampleMarker() {
         val coordinates = LatLng(41.4534227, 2.1841046)
-        val myMarkerData = MarkerData("ITB", coordinates)
-        mapViewModel.setMarkerData(myMarkerData)
+        val marker = MarkerOptions().position(coordinates).title("ITB")
+        mapViewModel.saveMarker(marker)
     }
 
     private fun isLocationPermissionGranted(): Boolean {

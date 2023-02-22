@@ -1,12 +1,13 @@
 package com.example.halalplaces.ui.map
 
-import android.text.Editable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.halalplaces.R
 import com.example.halalplaces.data.map.MapViewModel
 import com.example.halalplaces.databinding.FragmentAddMarkerBinding
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 
 class AddMarkerFragment : Fragment() {
 
@@ -24,10 +25,11 @@ class AddMarkerFragment : Fragment() {
 
     override fun onViewCreated(view: android.view.View, savedInstanceState: android.os.Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val markerData = mapViewModel.getMarkerData()
-        if (markerData?.name == "") binding.etMarkerLatitude.setText("${markerData.coordinates.latitude},${markerData.coordinates.longitude}")
+        val coordinates = mapViewModel.getMarkerPosition()
+        if (coordinates != null) binding.etMarkerLatitude.setText("${coordinates.latitude},${coordinates.longitude}")
         binding.btnSubmit.setOnClickListener {
             saveMarker()
+            toMapsFragment()
         }
 
         if (!::binding.isInitialized) binding = FragmentAddMarkerBinding.bind(view)
@@ -38,11 +40,13 @@ class AddMarkerFragment : Fragment() {
         val coordinates = binding.etMarkerLatitude.text.toString().split(',')
         val coordinate = LatLng(coordinates[0].toDouble(), coordinates[1].toDouble())
         val markerData = com.example.halalplaces.data.model.MarkerData(name, coordinate)
-        mapViewModel.setMarkerData(markerData)
+        val markerOptions = MarkerOptions().position(markerData.coordinates).title(markerData.name)
+        mapViewModel.saveMarker(markerOptions)
+        mapViewModel.setMarkerPosition(null)
+    }
 
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, MapsFragment(), "map")
-            .addToBackStack(tag)
-            .commit()
+    private fun toMapsFragment(){
+        val action = AddMarkerFragmentDirections.actionAddMarkerFragmentToMapsFragment()
+        findNavController().navigate(action)
     }
 }
