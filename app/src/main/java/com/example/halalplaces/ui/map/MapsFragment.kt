@@ -41,6 +41,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         createSampleMarker()
         map.setOnMapLongClickListener {coordinates ->
             mapViewModel.setMarkerPosition(coordinates)
+            addNewMarker()
         }
         enableLocation()
         mapViewModel.addAllMarkersToMap()

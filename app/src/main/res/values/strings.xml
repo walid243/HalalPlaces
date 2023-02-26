@@ -11,4 +11,6 @@
     <string name="login_failed">"Login failed"</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="add_marker">Add Marker</string>
+    <string name="navigation_drawer_close">close nav</string>
+    <string name="navigation_drawer_open">open nav</string>
 </resources>

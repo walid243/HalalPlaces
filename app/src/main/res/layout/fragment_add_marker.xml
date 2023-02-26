@@ -4,7 +4,8 @@
     android:id="@+id/fragment_marker_form"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.map.AddMarkerFragment">
+    tools:context=".ui.map.AddMarkerFragment"
+    android:layout_gravity="center">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,6 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Latitude"
+            android:text="41.445627, 2.183904"
             android:inputType="text" />
 
         <EditText
