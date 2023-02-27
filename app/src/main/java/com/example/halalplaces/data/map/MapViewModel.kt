@@ -19,6 +19,8 @@ class MapViewModel : ViewModel() {
         return map
     }
 
+    fun getAllMarkers() = markers.value!!
+
     fun setMarkerPosition(position: LatLng?){
         markerPosition = position
     }

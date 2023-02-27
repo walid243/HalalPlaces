@@ -32,4 +32,9 @@
             android:id="@+id/action_mapsFragment_to_addMarkerFragment"
             app:destination="@id/addMarkerFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/markerRecycler"
+        android:name="com.example.halalplaces.ui.map.MarkerRecycler"
+        android:label="fragment_marker_recycler"
+        tools:layout="@layout/fragment_marker_recycler" />
 </navigation>
