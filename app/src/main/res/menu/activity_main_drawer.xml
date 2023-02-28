@@ -2,8 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/markerRecycler"
+        android:id="@+id/markerRecyclerFragment"
         android:title="Marker Recycler" />
-
+    <item
+        android:id="@+id/mapsFragment"
+        android:title="maps" />
 
 </menu>

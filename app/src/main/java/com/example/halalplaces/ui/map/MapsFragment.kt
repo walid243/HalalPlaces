@@ -38,7 +38,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mapViewModel.setMap(googleMap)
         map = mapViewModel.getMap() ?: googleMap
-        createSampleMarker()
         map.setOnMapLongClickListener {coordinates ->
             mapViewModel.setMarkerPosition(coordinates)
             addNewMarker()
@@ -81,12 +80,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             ).show()
         }
 
-    }
-
-    fun createSampleMarker() {
-        val coordinates = LatLng(41.4534227, 2.1841046)
-        val marker = MarkerOptions().position(coordinates).title("ITB")
-        mapViewModel.saveMarker(marker)
     }
 
     private fun isLocationPermissionGranted(): Boolean {
