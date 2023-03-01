@@ -37,4 +37,8 @@
         android:name="com.example.halalplaces.ui.map.MarkerRecycler"
         android:label="fragment_marker_recycler"
         tools:layout="@layout/fragment_marker_recycler" />
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.example.halalplaces.ui.camera.CameraFragment"
+        android:label="CameraFragment" />
 </navigation>
