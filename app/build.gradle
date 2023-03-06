@@ -4,6 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
     id 'androidx.navigation.safeargs'
+    id("io.realm.kotlin") version "1.5.0"
 }
 def localProperties = new Properties()
 localProperties.load(new FileInputStream(rootProject.file("local.properties")))
@@ -67,6 +68,8 @@ dependencies {
     implementation "androidx.camera:camera-lifecycle:1.1.0-beta02"
     implementation "androidx.camera:camera-view:1.1.0-beta02"
     implementation "androidx.camera:camera-extensions:1.1.0-beta02"
+
+    implementation("io.realm.kotlin:library-sync:1.5.0")
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
