@@ -9,20 +9,27 @@ import io.realm.kotlin.mongodb.sync.SyncConfiguration
 
 object DataBase {
     val app: App = App.create(
-        AppConfiguration.Builder("halalplaces-wfubt")
+        AppConfiguration.Builder("halalplaces-svtez")
             .log(LogLevel.ERROR)
             .build()
     )
     lateinit var currentUser: User
     lateinit var realm: Realm
 
-    suspend fun login(userName: String, password: String) {
+    suspend fun login(userName: String, password: String): Boolean {
         val credentials = Credentials.emailPassword(userName, password)
-        app.login(credentials)
-
+        try {
+            app.login(credentials)
+        } catch(error:Exception) {
+            return false
+        }
         currentUser = app.currentUser!!
         openRealm(config())
-        subscriptRealm()
+        subscripToRealm()
+
+        return true
+
+
     }
 
     suspend fun register(userName: String, password: String) {
@@ -31,13 +38,14 @@ object DataBase {
     }
 
     fun config(): SyncConfiguration {
+        println("$currentUser <----------------------")
         return SyncConfiguration.Builder(currentUser, setOf(MarkerData::class))
             .initialSubscriptions { realm ->
                 add(
                     realm.query<MarkerData>(), "All Markers"
                 )
             }
-//            .waitForInitialRemoteData()
+            .waitForInitialRemoteData()
             .build()
 
     }
@@ -46,12 +54,12 @@ object DataBase {
         realm = Realm.open(config)
     }
 
-    suspend fun subscriptRealm() {
+    suspend fun subscripToRealm() {
         realm.subscriptions.waitForSynchronization()
     }
 
     fun insert() {
-        val sport = MarkerData(ownerId = DataBase.currentUser.id)
+        val sport = MarkerData(name = "", latitude = 0.0, longitude = 0.0, ownerId = currentUser.id)
         realm.writeBlocking {
             copyToRealm(sport)
         }

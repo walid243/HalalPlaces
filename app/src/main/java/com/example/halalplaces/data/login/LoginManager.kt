@@ -8,11 +8,15 @@ import kotlinx.coroutines.launch
 
 class LoginManager(): LoginInterface {
     override fun login(email: String, password: String) {
-        if (!isUserLogged()) {
-            CoroutineScope(Dispatchers.Default).launch{
-                DataBase.login(email, password)
+//        if (!isUserLogged()) {
+//            CoroutineScope(Dispatchers.Default).launch{
+//                DataBase.login(email, password)
+//            }
+//        }
+            CoroutineScope(Dispatchers.Default).launch {
+                   val isSuccessful = DataBase.login(email, password)
+                    if (!isSuccessful) DataBase.register(email,password)
             }
-        }
     }
 
     override fun register(email: String, password: String) {
@@ -24,4 +28,5 @@ class LoginManager(): LoginInterface {
     override fun isUserLogged(): Boolean {
         return DataBase.currentUser.loggedIn
     }
+
 }

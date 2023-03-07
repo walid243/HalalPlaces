@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.halalplaces.data.DataBase
 import com.example.halalplaces.data.login.LoginManager
 import com.example.halalplaces.databinding.FragmentLoginBinding
 
@@ -36,15 +37,17 @@ class LoginFragment : Fragment() {
 
         username.addTextChangedListener{
                 isValidEmail = checkEmail(it.toString())
+            enableLoginButton()
         }
         password.addTextChangedListener {
-            isValidPassword = checkPasswordLength(it.length)
-            }
-            enableLoginButton()
+                isValidPassword = checkPasswordLength(it?.length ?: 0)
+                enableLoginButton()
         }
 
         login.setOnClickListener {
-            toMapsFragment()
+            loginManager.login(username.text.toString(),password.text.toString())
+            println("${DataBase.app.currentUser?.id} <-------------")
+//            toMapsFragment()
         }
     }
 

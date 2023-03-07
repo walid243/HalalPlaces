@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.halalplaces.R
+import com.example.halalplaces.data.DataBase
 import com.example.halalplaces.data.map.MapViewModel
 import com.example.halalplaces.databinding.FragmentAddMarkerBinding
 import com.google.android.gms.maps.model.LatLng
@@ -38,9 +39,10 @@ class AddMarkerFragment : Fragment() {
     private fun saveMarker() {
         val name = binding.etMarkerName.text.toString()
         val coordinates = binding.etMarkerLatitude.text.toString().split(',')
-        val coordinate = LatLng(coordinates[0].toDouble(), coordinates[1].toDouble())
-        val markerData = com.example.halalplaces.data.model.MarkerData(name = name, coordinates =  coordinate)
-        val markerOptions = MarkerOptions().position(markerData.coordinates).title(markerData.name)
+        val latitude = coordinates[0].toDouble()
+        val longitude = coordinates[1].toDouble()
+        val markerData = com.example.halalplaces.data.model.MarkerData(name = name, latitude = latitude, longitude = longitude, ownerId = DataBase.currentUser.id)
+        val markerOptions = MarkerOptions().position(LatLng(latitude,longitude)).title(markerData.name)
         mapViewModel.saveMarker(markerOptions)
         mapViewModel.setMarkerPosition(null)
     }

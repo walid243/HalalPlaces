@@ -1,18 +1,17 @@
 package com.example.halalplaces.data.model
 
-import com.example.halalplaces.data.DataBase
-import com.google.android.gms.maps.model.LatLng
-import io.realm.kotlin.types.ObjectId
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.PrimaryKey
+import org.mongodb.kbson.ObjectId
 
 
 open class MarkerData(
     @PrimaryKey
-    val _id: ObjectId = ObjectId.create(),
-    val name: String = "",
-    val coordinates: LatLng = LatLng(0.0,0.0),
-    val ownerId: String = ""
+    var _id: ObjectId = ObjectId.invoke(),
+    var name: String,
+    var latitude: Double,
+    var longitude: Double,
+    val ownerId: String
 ): RealmObject {
-    constructor(): this(name = "")
+    constructor(): this(name = "", longitude = 0.0, latitude = 0.0, ownerId = "")
 }
