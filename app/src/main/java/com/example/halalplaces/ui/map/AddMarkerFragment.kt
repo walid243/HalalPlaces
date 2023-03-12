@@ -41,7 +41,7 @@ class AddMarkerFragment : Fragment() {
         val coordinates = binding.etMarkerLatitude.text.toString().split(',')
         val latitude = coordinates[0].toDouble()
         val longitude = coordinates[1].toDouble()
-        val markerData = com.example.halalplaces.data.model.MarkerData(name = name, latitude = latitude, longitude = longitude, ownerId = DataBase.currentUser.id)
+        val markerData = com.example.halalplaces.data.model.MarkerData(name = name, latitude = latitude, longitude = longitude, ownerId = DataBase.currentUser!!.id)
         val markerOptions = MarkerOptions().position(LatLng(latitude,longitude)).title(markerData.name)
         mapViewModel.saveMarker(markerOptions)
         mapViewModel.setMarkerPosition(null)

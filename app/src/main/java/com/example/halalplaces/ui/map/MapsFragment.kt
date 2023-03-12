@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.halalplaces.R
+import com.example.halalplaces.data.AppViewModel
 import com.example.halalplaces.data.map.MapViewModel
 import com.example.halalplaces.databinding.FragmentMapsBinding
 import com.google.android.gms.maps.GoogleMap
@@ -28,6 +29,7 @@ const val REQUEST_CODE_LOCATION = 100
 class MapsFragment : Fragment(), OnMapReadyCallback {
     lateinit var binding : FragmentMapsBinding
     private val mapViewModel : MapViewModel by activityViewModels()
+    private val appViewModel: AppViewModel by activityViewModels()
     private lateinit var map: GoogleMap
     fun createMap() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?

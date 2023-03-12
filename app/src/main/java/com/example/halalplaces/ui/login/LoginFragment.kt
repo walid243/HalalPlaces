@@ -5,17 +5,20 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.halalplaces.data.AppViewModel
 import com.example.halalplaces.data.DataBase
-import com.example.halalplaces.data.login.LoginManager
+import com.example.halalplaces.data.login.SessionManager
 import com.example.halalplaces.databinding.FragmentLoginBinding
 
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
-    private val loginManager = LoginManager()
+    private val appViewModel: AppViewModel by activityViewModels()
+    private val sessionManager = SessionManager()
     private var isValidEmail: Boolean = false
     private var isValidPassword: Boolean = false
 
@@ -45,14 +48,15 @@ class LoginFragment : Fragment() {
         }
 
         login.setOnClickListener {
-            loginManager.login(username.text.toString(),password.text.toString())
+            sessionManager.login(username.text.toString(),password.text.toString())
             println("${DataBase.app.currentUser?.id} <-------------")
-//            toMapsFragment()
+            appViewModel.setIsLoggedIn()
+            toSplashScreen()
         }
     }
 
-    fun toMapsFragment() {
-        val action = LoginFragmentDirections.actionLoginFragmentToMapsFragment()
+    fun toSplashScreen() {
+        val action = LoginFragmentDirections.actionLoginFragmentToSplashScreen()
         findNavController().navigate(action)
     }
 

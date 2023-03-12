@@ -13,7 +13,7 @@ object DataBase {
             .log(LogLevel.ERROR)
             .build()
     )
-    lateinit var currentUser: User
+    var currentUser: User? = null
     lateinit var realm: Realm
 
     suspend fun login(userName: String, password: String): Boolean {
@@ -24,6 +24,7 @@ object DataBase {
             return false
         }
         currentUser = app.currentUser!!
+        println("$currentUser <----------------------")
         openRealm(config())
         subscripToRealm()
 
@@ -39,7 +40,7 @@ object DataBase {
 
     fun config(): SyncConfiguration {
         println("$currentUser <----------------------")
-        return SyncConfiguration.Builder(currentUser, setOf(MarkerData::class))
+        return SyncConfiguration.Builder(currentUser!! , setOf(MarkerData::class))
             .initialSubscriptions { realm ->
                 add(
                     realm.query<MarkerData>(), "All Markers"
@@ -59,7 +60,7 @@ object DataBase {
     }
 
     fun insert() {
-        val sport = MarkerData(name = "", latitude = 0.0, longitude = 0.0, ownerId = currentUser.id)
+        val sport = MarkerData(name = "", latitude = 0.0, longitude = 0.0, ownerId = currentUser!!.id)
         realm.writeBlocking {
             copyToRealm(sport)
         }

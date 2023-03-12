@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/splashScreen">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -11,8 +11,8 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/action_loginFragment_to_mapsFragment"
-            app:destination="@id/mapsFragment" />
+            android:id="@+id/action_loginFragment_to_splashScreen"
+            app:destination="@id/splashScreen" />
     </fragment>
     <fragment
         android:id="@+id/addMarkerFragment"
@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_addMarkerFragment_to_mapsFragment"
             app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_addMarkerFragment_to_splashScreen"
+            app:destination="@id/splashScreen" />
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"
@@ -29,16 +32,38 @@
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps" >
         <action
+            android:id="@+id/action_mapsFragment_to_splashScreen"
+            app:destination="@id/splashScreen" />
+        <action
             android:id="@+id/action_mapsFragment_to_addMarkerFragment"
             app:destination="@id/addMarkerFragment" />
+        <action
+            android:id="@+id/action_mapsFragment_to_markerRecyclerFragment"
+            app:destination="@id/markerRecyclerFragment" />
     </fragment>
     <fragment
         android:id="@+id/markerRecyclerFragment"
         android:name="com.example.halalplaces.ui.map.MarkerRecycler"
         android:label="fragment_marker_recycler"
-        tools:layout="@layout/fragment_marker_recycler" />
+        tools:layout="@layout/fragment_marker_recycler" >
+        <action
+            android:id="@+id/action_markerRecyclerFragment_to_splashScreen"
+            app:destination="@id/splashScreen" />
+    </fragment>
     <fragment
         android:id="@+id/cameraFragment"
         android:name="com.example.halalplaces.ui.camera.CameraFragment"
         android:label="CameraFragment" />
+    <fragment
+        android:id="@+id/splashScreen"
+        android:name="com.example.halalplaces.ui.splashscreen.SplashScreen"
+        android:label="fragment_splash_screen"
+        tools:layout="@layout/fragment_splash_screen" >
+        <action
+            android:id="@+id/action_splashScreen_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_splashScreen_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </fragment>
 </navigation>
