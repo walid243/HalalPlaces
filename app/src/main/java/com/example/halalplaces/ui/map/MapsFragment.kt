@@ -31,7 +31,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private val mapViewModel : MapViewModel by activityViewModels()
     private val appViewModel: AppViewModel by activityViewModels()
     private lateinit var map: GoogleMap
-    fun createMap() {
+    private fun createMap() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
 

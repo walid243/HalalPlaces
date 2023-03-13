@@ -6,6 +6,9 @@ import io.realm.kotlin.ext.query
 import io.realm.kotlin.log.LogLevel
 import io.realm.kotlin.mongodb.*
 import io.realm.kotlin.mongodb.sync.SyncConfiguration
+import io.realm.kotlin.notifications.ResultsChange
+import io.realm.kotlin.query.RealmResults
+import kotlinx.coroutines.flow.Flow
 
 object DataBase {
     val app: App = App.create(
@@ -14,7 +17,10 @@ object DataBase {
             .build()
     )
     var currentUser: User? = null
-    lateinit var realm: Realm
+     var realm: Realm? = null
+
+
+    fun loggedIn() = currentUser?.loggedIn ?: false
 
     suspend fun login(userName: String, password: String): Boolean {
         val credentials = Credentials.emailPassword(userName, password)
@@ -23,11 +29,8 @@ object DataBase {
         } catch(error:Exception) {
             return false
         }
-        currentUser = app.currentUser!!
+        configureRealm()
         println("$currentUser <----------------------")
-        openRealm(config())
-        subscripToRealm()
-
         return true
 
 
@@ -38,6 +41,12 @@ object DataBase {
         login(userName, password)
     }
 
+    suspend fun configureRealm(){
+        currentUser = app.currentUser!!
+        openRealm(config())
+        subscribeToRealm()
+
+    }
     fun config(): SyncConfiguration {
         println("$currentUser <----------------------")
         return SyncConfiguration.Builder(currentUser!! , setOf(MarkerData::class))
@@ -55,15 +64,21 @@ object DataBase {
         realm = Realm.open(config)
     }
 
-    suspend fun subscripToRealm() {
-        realm.subscriptions.waitForSynchronization()
+    suspend fun subscribeToRealm() {
+        requireNotNull(realm)
+        realm!!.subscriptions.waitForSynchronization()
     }
 
-    fun insert() {
-        val sport = MarkerData(name = "", latitude = 0.0, longitude = 0.0, ownerId = currentUser!!.id)
-        realm.writeBlocking {
-            copyToRealm(sport)
+    fun insert(markerData: MarkerData) {
+        requireNotNull(realm)
+        realm!!.writeBlocking {
+            copyToRealm(markerData)
         }
+    }
+
+    fun getAllMarkers(): RealmResults<MarkerData> {
+        requireNotNull(realm)
+         return realm!!.query<MarkerData>().find()
     }
 
 }

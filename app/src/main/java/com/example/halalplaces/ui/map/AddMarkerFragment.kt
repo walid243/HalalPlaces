@@ -6,20 +6,21 @@ import androidx.navigation.fragment.findNavController
 import com.example.halalplaces.R
 import com.example.halalplaces.data.DataBase
 import com.example.halalplaces.data.map.MapViewModel
+import com.example.halalplaces.data.model.MarkerData
 import com.example.halalplaces.databinding.FragmentAddMarkerBinding
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
 class AddMarkerFragment : Fragment() {
 
-    private lateinit var binding : FragmentAddMarkerBinding
-    private val mapViewModel : MapViewModel by activityViewModels()
+    private lateinit var binding: FragmentAddMarkerBinding
+    private val mapViewModel: MapViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: android.view.LayoutInflater,
         container: android.view.ViewGroup?,
         savedInstanceState: android.os.Bundle?
-    ): android.view.View? {
+    ): android.view.View {
         binding = FragmentAddMarkerBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -41,13 +42,19 @@ class AddMarkerFragment : Fragment() {
         val coordinates = binding.etMarkerLatitude.text.toString().split(',')
         val latitude = coordinates[0].toDouble()
         val longitude = coordinates[1].toDouble()
-        val markerData = com.example.halalplaces.data.model.MarkerData(name = name, latitude = latitude, longitude = longitude, ownerId = DataBase.currentUser!!.id)
-        val markerOptions = MarkerOptions().position(LatLng(latitude,longitude)).title(markerData.name)
-        mapViewModel.saveMarker(markerOptions)
+        val markerData = MarkerData(
+            name = name,
+            latitude = latitude,
+            longitude = longitude,
+            ownerId = DataBase.currentUser!!.id
+        )
+
+
+        mapViewModel.saveMarker(markerData)
         mapViewModel.setMarkerPosition(null)
     }
 
-    private fun toMapsFragment(){
+    private fun toMapsFragment() {
         val action = AddMarkerFragmentDirections.actionAddMarkerFragmentToMapsFragment()
         findNavController().navigate(action)
     }

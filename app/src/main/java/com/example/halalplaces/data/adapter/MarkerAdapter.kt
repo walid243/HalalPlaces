@@ -6,10 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.halalplaces.R
+import com.example.halalplaces.data.model.MarkerData
 import com.example.halalplaces.databinding.RecyclerItemBinding
 import com.google.android.gms.maps.model.MarkerOptions
 
-class MarkerAdapter(private val markers: List<MarkerOptions>):
+class MarkerAdapter(private val markers: List<MarkerData>):
 RecyclerView.Adapter<MarkerAdapter.ViewHolder>()
 {
     inner class ViewHolder(view:View): RecyclerView.ViewHolder(view){
@@ -31,7 +32,7 @@ RecyclerView.Adapter<MarkerAdapter.ViewHolder>()
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val marker = markers[position]
         with(holder){
-            binding.title.text = marker.title
+            binding.title.text = marker.name
         }
     }
 }

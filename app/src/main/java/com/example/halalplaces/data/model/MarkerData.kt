@@ -11,7 +11,7 @@ open class MarkerData(
     var name: String,
     var latitude: Double,
     var longitude: Double,
-    val ownerId: String
+    var ownerId: String
 ): RealmObject {
     constructor(): this(name = "", longitude = 0.0, latitude = 0.0, ownerId = "")
 }

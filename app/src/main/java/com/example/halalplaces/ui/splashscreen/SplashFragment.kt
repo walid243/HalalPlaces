@@ -1,14 +1,13 @@
 package com.example.halalplaces.ui.splashscreen
 
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.halalplaces.data.AppViewModel
-import com.example.halalplaces.databinding.ActivityMainBinding
+import com.example.halalplaces.data.DataBase
 import com.example.halalplaces.databinding.FragmentSplashScreenBinding
 
-class SplashScreen : Fragment() {
+class SplashFragment : Fragment() {
     private lateinit var binding : FragmentSplashScreenBinding
     private val viewModel : AppViewModel by activityViewModels()
 
@@ -25,10 +24,13 @@ class SplashScreen : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.isLoggedIn.observe(viewLifecycleOwner ){
             if (it) {
-                val action = SplashScreenDirections.actionSplashScreenToMapsFragment()
+                while (DataBase.realm == null ){
+                    println("No hay realm <--------")
+                }
+                val action = SplashFragmentDirections.actionSplashScreenToMapsFragment()
                 findNavController().navigate(action)
             } else {
-                val action = SplashScreenDirections.actionSplashScreenToLoginFragment()
+                val action = SplashFragmentDirections.actionSplashScreenToLoginFragment()
                 findNavController().navigate(action)
             }
         }

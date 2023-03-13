@@ -56,7 +56,7 @@
         android:label="CameraFragment" />
     <fragment
         android:id="@+id/splashScreen"
-        android:name="com.example.halalplaces.ui.splashscreen.SplashScreen"
+        android:name="com.example.halalplaces.ui.splashscreen.SplashFragment"
         android:label="fragment_splash_screen"
         tools:layout="@layout/fragment_splash_screen" >
         <action
