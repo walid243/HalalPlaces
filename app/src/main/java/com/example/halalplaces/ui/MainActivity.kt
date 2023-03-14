@@ -3,6 +3,7 @@ package com.example.halalplaces.ui
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.doOnPreDraw
 import androidx.drawerlayout.widget.DrawerLayout
@@ -16,6 +17,7 @@ import com.example.halalplaces.R
 import com.example.halalplaces.data.AppViewModel
 import com.example.halalplaces.data.DataBase
 import com.example.halalplaces.databinding.ActivityMainBinding
+import com.google.android.material.navigation.NavigationBarMenu
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -34,6 +36,18 @@ class MainActivity : AppCompatActivity() {
 
         binding.navHostFragment.addOnLayoutChangeListener { _: View, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int ->
             println("layout changed <------------------------")
+            val supportActionBar: ActionBar? = this.supportActionBar
+
+            if (navController.currentDestination?.id == R.id.loginFragment){
+                println("Ocultateeeeeeeeee!!!!")
+                supportActionBar?.hide()
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            }else {
+                supportActionBar?.show()
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+
+            }
+
         }
 
         binding.logout.setOnClickListener {

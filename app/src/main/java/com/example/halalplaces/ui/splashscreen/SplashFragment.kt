@@ -6,6 +6,10 @@ import androidx.navigation.fragment.findNavController
 import com.example.halalplaces.data.AppViewModel
 import com.example.halalplaces.data.DataBase
 import com.example.halalplaces.databinding.FragmentSplashScreenBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
 
 class SplashFragment : Fragment() {
     private lateinit var binding : FragmentSplashScreenBinding
@@ -24,11 +28,13 @@ class SplashFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.isLoggedIn.observe(viewLifecycleOwner ){
             if (it) {
-                while (DataBase.realm == null ){
-                    println("No hay realm <--------")
+//                while (DataBase.realm == null ){
+//                }
+                CoroutineScope(Dispatchers.Default).launch {
+                    awaitAll(DataBase.subscribeToRealm())
+                    val action = SplashFragmentDirections.actionSplashScreenToMapsFragment()
+                    findNavController().navigate(action)
                 }
-                val action = SplashFragmentDirections.actionSplashScreenToMapsFragment()
-                findNavController().navigate(action)
             } else {
                 val action = SplashFragmentDirections.actionSplashScreenToLoginFragment()
                 findNavController().navigate(action)

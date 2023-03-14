@@ -6,9 +6,11 @@ import io.realm.kotlin.ext.query
 import io.realm.kotlin.log.LogLevel
 import io.realm.kotlin.mongodb.*
 import io.realm.kotlin.mongodb.sync.SyncConfiguration
-import io.realm.kotlin.notifications.ResultsChange
 import io.realm.kotlin.query.RealmResults
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 
 object DataBase {
     val app: App = App.create(
@@ -20,7 +22,7 @@ object DataBase {
      var realm: Realm? = null
 
 
-    fun loggedIn() = currentUser?.loggedIn ?: false
+    fun loggedIn() = app.currentUser?.loggedIn ?: false
 
     suspend fun login(userName: String, password: String): Boolean {
         val credentials = Credentials.emailPassword(userName, password)
@@ -30,7 +32,6 @@ object DataBase {
             return false
         }
         configureRealm()
-        println("$currentUser <----------------------")
         return true
 
 
@@ -43,11 +44,11 @@ object DataBase {
 
     suspend fun configureRealm(){
         currentUser = app.currentUser!!
-        openRealm(config())
+        openRealm(getConfig())
         subscribeToRealm()
 
     }
-    fun config(): SyncConfiguration {
+    private fun getConfig(): SyncConfiguration {
         println("$currentUser <----------------------")
         return SyncConfiguration.Builder(currentUser!! , setOf(MarkerData::class))
             .initialSubscriptions { realm ->
@@ -60,13 +61,20 @@ object DataBase {
 
     }
 
-    fun openRealm(config: SyncConfiguration) {
+    private fun openRealm(config: SyncConfiguration) {
         realm = Realm.open(config)
     }
 
-    suspend fun subscribeToRealm() {
+    suspend fun subscribeToRealm():Deferred<Boolean> {
         requireNotNull(realm)
-        realm!!.subscriptions.waitForSynchronization()
+        return CoroutineScope(Dispatchers.IO).async {
+            try {
+                realm!!.subscriptions.waitForSynchronization()
+                true
+            } catch (ex:Exception){
+                false
+            }
+        }
     }
 
     fun insert(markerData: MarkerData) {

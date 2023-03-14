@@ -8,7 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AppViewModel: ViewModel() {
+class AppViewModel : ViewModel() {
     val sessionManager = SessionManager()
     val isLoggedIn = MutableLiveData<Boolean>()
 
@@ -19,18 +19,19 @@ class AppViewModel: ViewModel() {
     fun setIsLoggedIn() {
         isLoggedIn.postValue(true)
     }
+
     fun setLoggedOut() {
         isLoggedIn.postValue(false)
     }
 
-    fun start(){
-        if(loggedIn()){
-            CoroutineScope(Dispatchers.IO).launch {
+    private fun start() {
+        CoroutineScope(Dispatchers.IO).launch {
+            if (loggedIn()) {
                 DataBase.configureRealm()
                 setIsLoggedIn()
+            } else {
+                setLoggedOut()
             }
-        } else {
-            setLoggedOut()
         }
     }
 
