@@ -29,7 +29,6 @@ const val REQUEST_CODE_LOCATION = 100
 class MapsFragment : Fragment(), OnMapReadyCallback {
     lateinit var binding : FragmentMapsBinding
     private val mapViewModel : MapViewModel by activityViewModels()
-    private val appViewModel: AppViewModel by activityViewModels()
     private lateinit var map: GoogleMap
     private fun createMap() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?

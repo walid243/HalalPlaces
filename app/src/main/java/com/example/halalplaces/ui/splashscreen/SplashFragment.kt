@@ -2,18 +2,16 @@ package com.example.halalplaces.ui.splashscreen
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.example.halalplaces.data.AppViewModel
 import com.example.halalplaces.data.DataBase
 import com.example.halalplaces.databinding.FragmentSplashScreenBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class SplashFragment : Fragment() {
-    private lateinit var binding : FragmentSplashScreenBinding
-    private val viewModel : AppViewModel by activityViewModels()
+    private lateinit var binding: FragmentSplashScreenBinding
+    private val viewModel: AppViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: android.view.LayoutInflater,
@@ -26,17 +24,23 @@ class SplashFragment : Fragment() {
 
     override fun onViewCreated(view: android.view.View, savedInstanceState: android.os.Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.isLoggedIn.observe(viewLifecycleOwner ){
+        viewModel.isLoggedIn.observe(viewLifecycleOwner) {
+            var action: NavDirections = SplashFragmentDirections.actionSplashScreenToLoginFragment()
+
             if (it) {
-//                while (DataBase.realm == null ){
-//                }
+                //Do Something
+                println("Cargando <---------------")
                 CoroutineScope(Dispatchers.Default).launch {
-                    awaitAll(DataBase.subscribeToRealm())
-                    val action = SplashFragmentDirections.actionSplashScreenToMapsFragment()
-                    findNavController().navigate(action)
+                    DataBase.subscribeToRealmAsync().await()
+                    withContext(Dispatchers.Main) {
+                        println("Terminó de cargar <------------")
+                        //Stop doing something
+                        action = SplashFragmentDirections.actionSplashScreenToMapsFragment()
+                        findNavController().navigate(action)
+                    }
+
                 }
             } else {
-                val action = SplashFragmentDirections.actionSplashScreenToLoginFragment()
                 findNavController().navigate(action)
             }
         }

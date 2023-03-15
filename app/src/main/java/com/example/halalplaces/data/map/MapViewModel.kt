@@ -16,6 +16,7 @@ class MapViewModel : ViewModel() {
     private var map: GoogleMap? = null
 
     init {
+        println("${DataBase.realm != null} <---------- Hay realm?")
         getMarkersFromDB()
     }
     fun setMap(map: GoogleMap) {

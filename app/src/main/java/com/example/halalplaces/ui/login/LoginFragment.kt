@@ -14,6 +14,10 @@ import com.example.halalplaces.data.AppViewModel
 import com.example.halalplaces.data.DataBase
 import com.example.halalplaces.data.login.SessionManager
 import com.example.halalplaces.databinding.FragmentLoginBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
@@ -38,20 +42,22 @@ class LoginFragment : Fragment() {
         val login = binding.login
 
 
-        username.addTextChangedListener{
-                isValidEmail = checkEmail(it.toString())
+        username.addTextChangedListener {
+            isValidEmail = checkEmail(it.toString())
             enableLoginButton()
         }
         password.addTextChangedListener {
-                isValidPassword = checkPasswordLength(it?.length ?: 0)
-                enableLoginButton()
+            isValidPassword = checkPasswordLength(it?.length ?: 0)
+            enableLoginButton()
         }
 
         login.setOnClickListener {
-            sessionManager.login(username.text.toString(),password.text.toString())
-            println("${DataBase.app.currentUser?.id} <-------------")
-            appViewModel.setIsLoggedIn()
-            toSplashScreen()
+            CoroutineScope(Dispatchers.IO).launch {
+                sessionManager.login(username.text.toString(), password.text.toString())
+                println("${DataBase.app.currentUser?.id} <-------------")
+                appViewModel.setIsLoggedIn()
+                withContext(Dispatchers.Main) { toSplashScreen() }
+            }
         }
     }
 

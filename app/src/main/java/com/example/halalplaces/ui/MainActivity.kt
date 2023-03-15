@@ -35,24 +35,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.navHostFragment.addOnLayoutChangeListener { _: View, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int ->
-            println("layout changed <------------------------")
             val supportActionBar: ActionBar? = this.supportActionBar
-
             if (navController.currentDestination?.id == R.id.loginFragment){
-                println("Ocultateeeeeeeeee!!!!")
                 supportActionBar?.hide()
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }else {
                 supportActionBar?.show()
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-
             }
-
         }
 
         binding.logout.setOnClickListener {
             appViewModel.sessionManager.logOut()
-            println("${DataBase.app.currentUser?.id} <-------------")
             appViewModel.setLoggedOut()
             closeDrawer()
             toLoginFragment()
@@ -69,7 +63,6 @@ class MainActivity : AppCompatActivity() {
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -79,11 +72,11 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    fun toLoginFragment() {
+    private fun toLoginFragment() {
         navController.navigate(R.id.loginFragment)
     }
 
-    fun closeDrawer() {
+    private fun closeDrawer() {
         binding.drawerLayout.close()
     }
 

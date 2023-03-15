@@ -7,14 +7,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SessionManager(): LoginInterface {
-    override fun login(email: String, password: String) {
-            CoroutineScope(Dispatchers.Default).launch {
+    override suspend fun login(email: String, password: String) {
                    val isSuccessful = DataBase.login(email, password)
                     if (!isSuccessful) DataBase.register(email,password)
-            }
     }
 
-    override fun register(email: String, password: String) {
+    override suspend fun register(email: String, password: String) {
         CoroutineScope(Dispatchers.Default).launch{
             DataBase.register(email, password)
         }

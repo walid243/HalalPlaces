@@ -33,8 +33,6 @@ object DataBase {
         }
         configureRealm()
         return true
-
-
     }
 
     suspend fun register(userName: String, password: String) {
@@ -42,14 +40,12 @@ object DataBase {
         login(userName, password)
     }
 
-    suspend fun configureRealm(){
+    fun configureRealm(){
         currentUser = app.currentUser!!
         openRealm(getConfig())
-        subscribeToRealm()
 
     }
     private fun getConfig(): SyncConfiguration {
-        println("$currentUser <----------------------")
         return SyncConfiguration.Builder(currentUser!! , setOf(MarkerData::class))
             .initialSubscriptions { realm ->
                 add(
@@ -58,15 +54,13 @@ object DataBase {
             }
             .waitForInitialRemoteData()
             .build()
-
     }
 
     private fun openRealm(config: SyncConfiguration) {
         realm = Realm.open(config)
     }
 
-    suspend fun subscribeToRealm():Deferred<Boolean> {
-        requireNotNull(realm)
+    suspend fun subscribeToRealmAsync():Deferred<Boolean> {
         return CoroutineScope(Dispatchers.IO).async {
             try {
                 realm!!.subscriptions.waitForSynchronization()
