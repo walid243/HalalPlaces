@@ -2,13 +2,11 @@ package com.example.halalplaces.data.map
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import com.example.halalplaces.data.DataBase
 import com.example.halalplaces.data.model.MarkerData
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.coroutines.flow.map
 
 class MapViewModel : ViewModel() {
     private var markers = MutableLiveData<MutableList<MarkerData>>(mutableListOf())
@@ -49,7 +47,7 @@ class MapViewModel : ViewModel() {
         val currentMarkers = markers.value!!
         currentMarkers.add(markerData)
         markers.postValue(currentMarkers)
-        DataBase.insert(markerData)
+        DataBase.insertMarker(markerData)
     }
 
     private fun getMarkersFromDB(){

@@ -1,6 +1,7 @@
 package com.example.halalplaces.data
 
 import com.example.halalplaces.data.model.MarkerData
+import com.example.halalplaces.data.model.UserData
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.log.LogLevel
@@ -19,7 +20,7 @@ object DataBase {
             .build()
     )
     var currentUser: User? = null
-     var realm: Realm? = null
+    var realm: Realm? = null
 
 
     fun loggedIn() = app.currentUser?.loggedIn ?: false
@@ -28,28 +29,43 @@ object DataBase {
         val credentials = Credentials.emailPassword(userName, password)
         try {
             app.login(credentials)
-        } catch(error:Exception) {
+        } catch (error: Exception) {
             return false
         }
         configureRealm()
         return true
     }
 
-    suspend fun register(userName: String, password: String) {
-        app.emailPasswordAuth.registerUser(userName, password)
-        login(userName, password)
+    suspend fun register(userEmail: String, password: String) {
+        app.emailPasswordAuth.registerUser(userEmail, password)
+        login(userEmail, password)
+
+        if (currentUser != null) {
+            insertUser(
+                UserData(
+                    _id = app.currentUser!!.id,
+                    name = userEmail.substringBefore("@"),
+                    email = userEmail,
+                    avatar = null
+                )
+            )
+        }
     }
 
-    fun configureRealm(){
+    fun configureRealm() {
         currentUser = app.currentUser!!
         openRealm(getConfig())
 
     }
+
     private fun getConfig(): SyncConfiguration {
-        return SyncConfiguration.Builder(currentUser!! , setOf(MarkerData::class))
+        return SyncConfiguration.Builder(currentUser!!, setOf(MarkerData::class, UserData::class))
             .initialSubscriptions { realm ->
                 add(
                     realm.query<MarkerData>(), "All Markers"
+                )
+                add(
+                    realm.query<UserData>("_id == $0", currentUser!!.id), "Current user data"
                 )
             }
             .waitForInitialRemoteData()
@@ -58,29 +74,36 @@ object DataBase {
 
     private fun openRealm(config: SyncConfiguration) {
         realm = Realm.open(config)
+
     }
 
-    suspend fun subscribeToRealmAsync():Deferred<Boolean> {
+    suspend fun subscribeToRealmAsync(): Deferred<Boolean> {
         return CoroutineScope(Dispatchers.IO).async {
             try {
                 realm!!.subscriptions.waitForSynchronization()
                 true
-            } catch (ex:Exception){
+            } catch (ex: Exception) {
                 false
             }
         }
     }
 
-    fun insert(markerData: MarkerData) {
+    fun insertMarker(markerData: MarkerData) {
         requireNotNull(realm)
         realm!!.writeBlocking {
             copyToRealm(markerData)
         }
     }
 
+    fun insertUser(userData: UserData) {
+        realm!!.writeBlocking {
+            copyToRealm(userData)
+        }
+    }
+
     fun getAllMarkers(): RealmResults<MarkerData> {
         requireNotNull(realm)
-         return realm!!.query<MarkerData>().find()
+        return realm!!.query<MarkerData>().find()
     }
 
 }
