@@ -1,9 +1,13 @@
 package com.example.halalplaces.ui.splashscreen
 
+import android.graphics.BitmapFactory
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import com.example.halalplaces.R
 import com.example.halalplaces.data.AppViewModel
 import com.example.halalplaces.data.DataBase
 import com.example.halalplaces.databinding.FragmentSplashScreenBinding
@@ -34,6 +38,14 @@ class SplashFragment : Fragment() {
                     DataBase.subscribeToRealmAsync().await()
                     withContext(Dispatchers.Main) {
                         println("Terminó de cargar <------------")
+                        val userData = DataBase.getUserData()
+                        requireActivity().findViewById<TextView>(R.id.username).text = userData.name
+                        if (userData.avatar != null) {
+                            val userAvatar = BitmapFactory.decodeByteArray(userData.avatar, 0, userData.avatar!!.size)
+                            requireActivity().findViewById<ImageView>(R.id.userAvatar)
+                                .setImageBitmap(userAvatar)
+                        }
+
                         //Stop doing something
                         action = SplashFragmentDirections.actionSplashScreenToMapsFragment()
                         findNavController().navigate(action)

@@ -106,4 +106,9 @@ object DataBase {
         return realm!!.query<MarkerData>().find()
     }
 
+    fun getUserData(): UserData {
+        requireNotNull(realm)
+        return realm!!.query<UserData>("_id == $0", currentUser!!.id).find().first()
+    }
+
 }
