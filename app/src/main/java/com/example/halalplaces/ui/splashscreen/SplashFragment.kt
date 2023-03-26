@@ -32,18 +32,22 @@ class SplashFragment : Fragment() {
             var action: NavDirections = SplashFragmentDirections.actionSplashScreenToLoginFragment()
 
             if (it) {
-                //Do Something
-                println("Cargando <---------------")
                 CoroutineScope(Dispatchers.Default).launch {
                     DataBase.subscribeToRealmAsync().await()
                     withContext(Dispatchers.Main) {
-                        println("Terminó de cargar <------------")
                         val userData = DataBase.getUserData()
-                        requireActivity().findViewById<TextView>(R.id.username).text = userData.name
-                        if (userData.avatar != null) {
-                            val userAvatar = BitmapFactory.decodeByteArray(userData.avatar, 0, userData.avatar!!.size)
-                            requireActivity().findViewById<ImageView>(R.id.userAvatar)
-                                .setImageBitmap(userAvatar)
+                        if (userData != null) {
+                            requireActivity().findViewById<TextView>(R.id.username).text =
+                                userData.name
+                            if (userData.avatar != null) {
+                                val userAvatar = BitmapFactory.decodeByteArray(
+                                    userData.avatar,
+                                    0,
+                                    userData.avatar!!.size
+                                )
+                                requireActivity().findViewById<ImageView>(R.id.userAvatar)
+                                    .setImageBitmap(userAvatar)
+                            }
                         }
 
                         //Stop doing something

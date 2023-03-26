@@ -5,15 +5,18 @@ import com.example.halalplaces.data.interfaces.LoginInterface
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class SessionManager(): LoginInterface {
-    override suspend fun login(email: String, password: String) {
-                   val isSuccessful = DataBase.login(email, password)
-                    if (!isSuccessful) DataBase.register(email,password)
+class SessionManager : LoginInterface {
+    override suspend fun login(email: String, password: String): Boolean {
+                   var isSuccessful = DataBase.login(email, password)
+                    if (!isSuccessful) isSuccessful = DataBase.register(email,password)
+                    if (!isSuccessful) return false
+                    return true
     }
 
-    override suspend fun register(email: String, password: String) {
-        CoroutineScope(Dispatchers.Default).launch{
+    override suspend fun register(email: String, password: String): Boolean {
+        return withContext(CoroutineScope(Dispatchers.Default).coroutineContext) {
             DataBase.register(email, password)
         }
     }

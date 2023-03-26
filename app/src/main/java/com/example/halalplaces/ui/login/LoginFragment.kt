@@ -5,6 +5,7 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -52,10 +53,17 @@ class LoginFragment : Fragment() {
 
         login.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                sessionManager.login(username.text.toString(), password.text.toString())
+                if (!sessionManager.login(username.text.toString(), password.text.toString())) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Email or password incorrect", Toast.LENGTH_SHORT)
+                            .show()
+                        username.text.clear()
+                        password.text.clear()
+                    }
+                }
                 println("${DataBase.app.currentUser?.id} <-------------")
                 appViewModel.setIsLoggedIn()
-                withContext(Dispatchers.Main) { toSplashScreen() }
+                if (DataBase.loggedIn()) withContext(Dispatchers.Main) { toSplashScreen() }
             }
         }
     }

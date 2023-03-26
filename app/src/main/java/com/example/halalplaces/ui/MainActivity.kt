@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.doOnPreDraw
 import androidx.drawerlayout.widget.DrawerLayout
@@ -24,22 +25,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     private val appViewModel: AppViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.drawerLayout.setOnClickListener {
-            closeDrawer()
-        }
 
         binding.navHostFragment.addOnLayoutChangeListener { _: View, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int, _: Int ->
             val supportActionBar: ActionBar? = this.supportActionBar
-            if (navController.currentDestination?.id == R.id.loginFragment){
+            if (navController.currentDestination?.id == R.id.loginFragment) {
                 supportActionBar?.hide()
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-            }else {
+            } else {
                 supportActionBar?.show()
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             }
@@ -63,6 +62,8 @@ class MainActivity : AppCompatActivity() {
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
+//        createActionBarDrawerToggle()
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -77,7 +78,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun closeDrawer() {
-        binding.drawerLayout.close()
+        println("${binding.navView.isLaidOut}<------------------>${binding.drawerLayout.isOpen}")
+        if (binding.navView.isLaidOut) {
+            println("Drawer is open<------------------")
+            binding.drawerLayout.close()
+        }
+
+    }
+
+    private fun createActionBarDrawerToggle() {
+        actionBarDrawerToggle = ActionBarDrawerToggle(
+            this,
+            binding.drawerLayout,
+            R.string.open,
+            R.string.close
+        )
+
+        binding.drawerLayout.addDrawerListener(actionBarDrawerToggle)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeButtonEnabled(true)
+        actionBarDrawerToggle.syncState()
     }
 
 

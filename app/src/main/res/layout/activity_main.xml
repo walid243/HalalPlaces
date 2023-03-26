@@ -50,8 +50,6 @@
             app:useCompatPadding="true"
             android:focusable="true" />
 
-        <!--            android:textAlignment="center"-->
-
     </com.google.android.material.navigation.NavigationView>
 
 
