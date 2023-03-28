@@ -1,9 +1,8 @@
 package com.example.halalplaces.data
 
 import android.content.res.Resources
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.Image
-import android.media.ImageReader
 import android.media.ThumbnailUtils
 import com.example.halalplaces.data.model.MarkerData
 import com.example.halalplaces.data.model.UserData
@@ -17,7 +16,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlin.io.path.Path
+import java.io.ByteArrayOutputStream
+
 
 object DataBase {
     val app: App = App.create(
@@ -119,7 +119,9 @@ object DataBase {
 
     fun getUserData(): UserData? {
         requireNotNull(realm)
-        return realm!!.query<UserData>("_id == $0", currentUser!!.id).find().first() ?: null
+        val data = realm!!.query<UserData>("_id == $0", currentUser!!.id).find()
+        return if (data.isNotEmpty()) data.first()
+        else null
     }
 
 }

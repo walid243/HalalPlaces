@@ -1,11 +1,13 @@
 package com.example.halalplaces.ui
 
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.doOnPreDraw
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -18,6 +20,7 @@ import com.example.halalplaces.R
 import com.example.halalplaces.data.AppViewModel
 import com.example.halalplaces.data.DataBase
 import com.example.halalplaces.databinding.ActivityMainBinding
+import com.google.android.material.internal.ToolbarUtils
 import com.google.android.material.navigation.NavigationBarMenu
 
 class MainActivity : AppCompatActivity() {
@@ -62,7 +65,7 @@ class MainActivity : AppCompatActivity() {
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-//        createActionBarDrawerToggle()
+        createActionBarDrawerToggle()
 
     }
 
@@ -93,12 +96,21 @@ class MainActivity : AppCompatActivity() {
             R.string.open,
             R.string.close
         )
+        actionBarDrawerToggle.setToolbarNavigationClickListener {
+            println("Se ha hecho click en el icono <----------------- ")
+            if (binding.drawerLayout.isOpen){
+                binding.drawerLayout.close()
+            } else {
+                binding.drawerLayout.open()
+            }
+        }
+        binding.drawerLayout.setDrawerListener(actionBarDrawerToggle)
 
-        binding.drawerLayout.addDrawerListener(actionBarDrawerToggle)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeButtonEnabled(true)
-        actionBarDrawerToggle.syncState()
     }
 
+    override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+        super.onPostCreate(savedInstanceState, persistentState)
+        actionBarDrawerToggle.syncState()
+    }
 
 }

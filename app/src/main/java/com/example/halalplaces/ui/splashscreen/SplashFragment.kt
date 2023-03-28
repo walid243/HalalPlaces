@@ -1,8 +1,11 @@
 package com.example.halalplaces.ui.splashscreen
 
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.media.ThumbnailUtils
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavDirections
@@ -35,6 +38,7 @@ class SplashFragment : Fragment() {
                 CoroutineScope(Dispatchers.Default).launch {
                     DataBase.subscribeToRealmAsync().await()
                     withContext(Dispatchers.Main) {
+
                         val userData = DataBase.getUserData()
                         if (userData != null) {
                             requireActivity().findViewById<TextView>(R.id.username).text =
