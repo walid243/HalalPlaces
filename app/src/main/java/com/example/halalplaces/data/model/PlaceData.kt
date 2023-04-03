@@ -5,7 +5,7 @@ import io.realm.kotlin.types.annotations.PrimaryKey
 import org.mongodb.kbson.ObjectId
 
 
-open class MarkerData(
+open class PlaceData(
     @PrimaryKey
     var _id: ObjectId = ObjectId.invoke(),
     var name: String,

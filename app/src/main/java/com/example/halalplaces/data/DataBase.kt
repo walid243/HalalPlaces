@@ -1,10 +1,6 @@
 package com.example.halalplaces.data
 
-import android.content.res.Resources
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.media.ThumbnailUtils
-import com.example.halalplaces.data.model.MarkerData
+import com.example.halalplaces.data.model.PlaceData
 import com.example.halalplaces.data.model.UserData
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
@@ -16,7 +12,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import java.io.ByteArrayOutputStream
 
 
 object DataBase {
@@ -70,10 +65,10 @@ object DataBase {
     }
 
     private fun getConfig(): SyncConfiguration {
-        return SyncConfiguration.Builder(currentUser!!, setOf(MarkerData::class, UserData::class))
+        return SyncConfiguration.Builder(currentUser!!, setOf(PlaceData::class, UserData::class))
             .initialSubscriptions { realm ->
                 add(
-                    realm.query<MarkerData>(), "All Markers"
+                    realm.query<PlaceData>(), "All Markers"
                 )
                 add(
                     realm.query<UserData>("_id == $0", currentUser!!.id), "Current user data"
@@ -99,10 +94,10 @@ object DataBase {
         }
     }
 
-    fun insertMarker(markerData: MarkerData) {
+    fun insertMarker(placeData: PlaceData) {
         requireNotNull(realm)
         realm!!.writeBlocking {
-            copyToRealm(markerData)
+            copyToRealm(placeData)
         }
     }
 
@@ -112,9 +107,9 @@ object DataBase {
         }
     }
 
-    fun getAllMarkers(): RealmResults<MarkerData> {
+    fun getAllMarkers(): RealmResults<PlaceData> {
         requireNotNull(realm)
-        return realm!!.query<MarkerData>().find()
+        return realm!!.query<PlaceData>().find()
     }
 
     fun getUserData(): UserData? {

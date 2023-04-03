@@ -3,13 +3,13 @@ package com.example.halalplaces.data.map
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.halalplaces.data.DataBase
-import com.example.halalplaces.data.model.MarkerData
+import com.example.halalplaces.data.model.PlaceData
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
 class MapViewModel : ViewModel() {
-    private var markers = MutableLiveData<MutableList<MarkerData>>(mutableListOf())
+    private var markers = MutableLiveData<MutableList<PlaceData>>(mutableListOf())
     private var markerPosition: LatLng? = null
     private var map: GoogleMap? = null
 
@@ -43,11 +43,11 @@ class MapViewModel : ViewModel() {
         }
     }
 
-    fun saveMarker(markerData: MarkerData) {
+    fun saveMarker(placeData: PlaceData) {
         val currentMarkers = markers.value!!
-        currentMarkers.add(markerData)
+        currentMarkers.add(placeData)
         markers.postValue(currentMarkers)
-        DataBase.insertMarker(markerData)
+        DataBase.insertMarker(placeData)
     }
 
     private fun getMarkersFromDB(){
