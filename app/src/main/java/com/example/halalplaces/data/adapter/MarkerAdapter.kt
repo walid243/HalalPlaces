@@ -6,14 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.halalplaces.R
+import com.example.halalplaces.data.interfaces.ClickInterface
+import com.example.halalplaces.data.model.Place
 import com.example.halalplaces.data.model.PlaceData
 import com.example.halalplaces.databinding.RecyclerItemBinding
 
-class MarkerAdapter(private val markers: List<PlaceData>):
+class MarkerAdapter(private val placeDataList: List<PlaceData>, private val listener: ClickInterface):
 RecyclerView.Adapter<MarkerAdapter.ViewHolder>()
 {
     inner class ViewHolder(view:View): RecyclerView.ViewHolder(view){
         val binding = RecyclerItemBinding.bind(view)
+        fun setListener(place: Place) {
+            binding.root.setOnClickListener {
+                listener.onClick(place)
+            }
+        }
     }
 
     private lateinit var context : Context
@@ -25,13 +32,15 @@ RecyclerView.Adapter<MarkerAdapter.ViewHolder>()
     }
 
     override fun getItemCount(): Int {
-        return markers.size
+        return placeDataList.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val marker = markers[position]
+        val placeData = placeDataList[position]
+        val place = Place(placeData.name, placeData.description, placeData.image)
         with(holder){
-            binding.title.text = marker.name
+            setListener(place)
+            binding.title.text = place.name
         }
     }
 }
