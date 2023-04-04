@@ -39,7 +39,8 @@
         android:src="@drawable/ic_launcher_foreground"
         app:layout_constraintTop_toBottomOf="@+id/PlaceDescription"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/image_of_the_place" />
 
 
 
