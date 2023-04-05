@@ -1,5 +1,6 @@
 package com.example.halalplaces.data.map
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.halalplaces.data.DataBase
@@ -11,10 +12,10 @@ import com.google.android.gms.maps.model.MarkerOptions
 class MapViewModel : ViewModel() {
     private var markers = MutableLiveData<MutableList<PlaceData>>(mutableListOf())
     private var markerPosition: LatLng? = null
+    var image: Uri? = null
     private var map: GoogleMap? = null
 
     init {
-        println("${DataBase.realm != null} <---------- Hay realm?")
         getMarkersFromDB()
     }
     fun setMap(map: GoogleMap) {

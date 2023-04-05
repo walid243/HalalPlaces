@@ -1,5 +1,9 @@
 package com.example.halalplaces.ui.map
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.media.ThumbnailUtils
+import androidx.annotation.DrawableRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -7,6 +11,7 @@ import com.example.halalplaces.data.DataBase
 import com.example.halalplaces.data.map.MapViewModel
 import com.example.halalplaces.data.model.PlaceData
 import com.example.halalplaces.databinding.FragmentAddMarkerBinding
+import java.io.ByteArrayOutputStream
 
 class AddMarkerFragment : Fragment() {
 
@@ -26,6 +31,10 @@ class AddMarkerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val coordinates = mapViewModel.getMarkerPosition()
         if (coordinates != null) binding.etMarkerLatitude.setText("${coordinates.latitude},${coordinates.longitude}")
+        if (mapViewModel.image != null) binding.addPhoto.setImageURI(mapViewModel.image)
+        binding.addPhoto.setOnClickListener {
+            toCameraFragment()
+        }
         binding.btnSubmit.setOnClickListener {
             saveMarker()
             toMapsFragment()
@@ -45,14 +54,17 @@ class AddMarkerFragment : Fragment() {
             longitude = longitude,
             ownerId = DataBase.currentUser!!.id
         )
-
-
         mapViewModel.saveMarker(placeData)
         mapViewModel.setMarkerPosition(null)
     }
 
     private fun toMapsFragment() {
         val action = AddMarkerFragmentDirections.actionAddMarkerFragmentToMapsFragment()
+        findNavController().navigate(action)
+    }
+
+    private fun toCameraFragment(){
+        val action = AddMarkerFragmentDirections.actionAddMarkerFragmentToCameraFragment()
         findNavController().navigate(action)
     }
 }

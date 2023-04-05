@@ -7,9 +7,6 @@
     <item
         android:id="@+id/mapsFragment"
         android:title="maps" />
-    <item
-        android:id="@+id/cameraFragment"
-        android:title="Camera" />
     </group>
 
 

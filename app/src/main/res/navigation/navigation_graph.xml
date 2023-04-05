@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_addMarkerFragment_to_splashScreen"
             app:destination="@id/splashScreen" />
+        <action
+            android:id="@+id/action_addMarkerFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"
@@ -56,7 +59,11 @@
     <fragment
         android:id="@+id/cameraFragment"
         android:name="com.example.halalplaces.ui.camera.CameraFragment"
-        android:label="CameraFragment" />
+        android:label="CameraFragment" >
+        <action
+            android:id="@+id/action_cameraFragment_to_addMarkerFragment"
+            app:destination="@id/addMarkerFragment" />
+    </fragment>
     <fragment
         android:id="@+id/splashScreen"
         android:name="com.example.halalplaces.ui.splashscreen.SplashFragment"

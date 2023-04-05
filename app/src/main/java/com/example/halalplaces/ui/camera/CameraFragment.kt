@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
+import androidx.activity.setViewTreeOnBackPressedDispatcherOwner
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -17,7 +19,10 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.halalplaces.R
+import com.example.halalplaces.data.map.MapViewModel
 import com.example.halalplaces.databinding.FragmentCameraBinding
 import java.io.File
 import java.text.SimpleDateFormat
@@ -31,6 +36,7 @@ class CameraFragment : Fragment() {
     private var imageCapture: ImageCapture? = null
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
+    val mapViewModel : MapViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +60,7 @@ class CameraFragment : Fragment() {
         cameraExecutor = Executors.newSingleThreadExecutor()
         return binding.root
     }
+
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
             requireContext(), it) == PackageManager.PERMISSION_GRANTED
@@ -79,7 +86,7 @@ class CameraFragment : Fragment() {
 
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
-        val photoFile = File(outputDirectory, SimpleDateFormat(CameraFragment.FILENAME_FORMAT, Locale.US).format(System.currentTimeMillis()) + ".jpg")
+        val photoFile = File(outputDirectory, SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(System.currentTimeMillis()) + ".jpg")
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
         imageCapture.takePicture(outputOptions, ContextCompat.getMainExecutor(requireContext()), object: ImageCapture.OnImageSavedCallback{
             override fun onError(exc: ImageCaptureException) {
@@ -88,9 +95,11 @@ class CameraFragment : Fragment() {
 
             override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                 val savedUri = Uri.fromFile(photoFile)
+                mapViewModel.image = savedUri
                 val msg = "Photo capture succeeded: $savedUri"
                 Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
                 Log.d(TAG, msg)
+                toAddMarkerFragment()
             }
         })
 
@@ -116,4 +125,8 @@ class CameraFragment : Fragment() {
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
 
+    private fun toAddMarkerFragment(){
+        val action = CameraFragmentDirections.actionCameraFragmentToAddMarkerFragment()
+        findNavController().navigate(action)
+    }
 }
